@@ -22,6 +22,10 @@ import org.springframework.web.bind.annotation.RestController;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 
+/*
+ Swagger url: http://{host}:{port}/swagger-ui/ 
+ */
+
 @RestController
 @RequestMapping("v1")
 public class ApiController {
