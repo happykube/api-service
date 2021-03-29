@@ -26,9 +26,9 @@
     - 본인 OS ID로 변경: su - {OS userid}
     - git clone https://github.com/happyspringcloud/run-cicd.git
     - sudo ln -s ~/run-cicd/cmd/run-cicd /usr/local/bin/run-cicd
-  - maven 설치: [maven설치](https://happycloud-lee.tistory.com/186?category=902419)참조하여 설치 
+  - maven 설치: [maven설치](https://happycloud-lee.tistory.com/186?category=902419) 참조하여 설치 
 
-- cicd/cicd-common.properties 정의 후 git push 
+- cicd/cicd-common.properties 파일에서 값 적절히 정의 후 git push 
 - Pipeline을 실행할 서버에서 실행 
   - mkdir cicd && cd cicd 
   - git clone https://github.com/happynsmall/api-service.git
