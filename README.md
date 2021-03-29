@@ -17,4 +17,4 @@
 - 웹브라우저에서 http://localhost:8881/swagger-ui/ 오픈 
 
 ## How to git push 
-(STS에서 git commit & push하기)[https://happycloud-lee.tistory.com/194?category=832250] 참조
+[STS에서 git commit & push하기](https://happycloud-lee.tistory.com/194?category=832250) 참조
