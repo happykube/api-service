@@ -25,7 +25,8 @@
     - CI/CD Pipeline을 실행할 서버로 로그인 
     - 본인 OS ID로 변경: su - {OS userid}
     - git clone https://github.com/happyspringcloud/run-cicd.git
-    - sudo ln -s ~/run-cicd/cmd/run-cicd /usr/local/bin/run-cicd
+    - mkdir bin
+    - ln -s ~/run-cicd/cmd/run-cicd ~/bin/run-cicd
   - maven 설치: [maven설치](https://happycloud-lee.tistory.com/186?category=902419) 참조하여 설치 
 
 - cicd/cicd-common.properties 파일에서 값 적절히 정의 후 git push 
