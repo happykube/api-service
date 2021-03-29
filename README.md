@@ -32,7 +32,7 @@
 - Pipeline을 실행할 서버에서 실행 
   - mkdir cicd && cd cicd 
   - git clone https://github.com/happynsmall/api-service.git
-  - cd api-service
+  - cd api-service 
   - run-cicd {image registry userid} {image registry password} . dev . java 
     - ex) run-cicd happycloudpak passw0rd . dev . java 
     
