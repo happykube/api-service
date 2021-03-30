@@ -17,6 +17,19 @@
 - 웹브라우저에서 http://localhost:8881/swagger-ui/ 오픈 
 
 ## How to git push 
+- github.com에 본인의 repository를 만듭니다.   
+- git clone한 디렉토리로 이동하여, 원격 git repository를 본인걸로 바꿉니다. 
+```
+$ cd ~/api/api-service
+$ git remote remove origin
+$ git init 
+$ git remote add origin {your git repository url}
+```
+- 본인 git repository로 푸시 합니다.  
+```
+$ git add . && git commit -m "copy my repo" && git push -u origin main
+```
+STS에서 편하게 push할 수도 있습니다. 아래를 참조하세요.   
 [STS에서 git commit & push하기](https://happycloud-lee.tistory.com/194?category=832250) 참조
 
 ## How to deploy on k8s cluster
@@ -36,5 +49,3 @@
   - cd api-service 
   - run-cicd {image registry userid} {image registry password} . dev . java 
     - ex) run-cicd happycloudpak passw0rd . dev . java 
-    
-     # api-service
