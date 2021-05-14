@@ -3,7 +3,7 @@
 ## How to import project 
 - 작업PC에 디렉토리를 생성: 
   예) mkdir -p \~/study/src && cd ~/study/src
-- clone git repository: git clone https://github.com/happykbfg/api-service.git 
+- clone git repository: git clone https://github.com/happykube/api-service.git 
 - STS 실행 
 - Workspace를 위에서 생성한 디렉토리(예:study)로 변경 : File > Switch Workspace
 - Import project 
