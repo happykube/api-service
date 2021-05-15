@@ -36,7 +36,7 @@ node {
     }
 
     //-- 환경변수 파일 읽어서 변수값 셋팅
-    def props = readProperties  file:"./deployment-k8s/pipeline.properties"  
+    def props = readProperties  file:"./cicd/pipeline.properties"  
 
     def imageRegistry = props["imageResgistry"]
     def imageOrganization = props["imageOrganization"]
@@ -70,11 +70,7 @@ node {
             //dir("${env.WORKSPACE}/${baseDir}")
             script {
                 sh "cd ~"
-                sh "if [ -f ~/run-cicd/cmd/run-cicd ]; then "
-                sh "  git pull "
-                sh "else "
-                sh "  git clone https://github.com/happykube/run-cicd.git "
-                sh "fi"
+                sh "if [ -f ~/run-cicd/cmd/run-cicd ]; then git pull; else git clone https://github.com/happykube/run-cicd.git; fi"
             }
         }
 
