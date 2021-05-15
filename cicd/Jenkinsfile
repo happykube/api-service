@@ -101,9 +101,10 @@ node {
         stageName = "Copy CI/CD Scripts to bastion"
         stage(stageName) {
             script {
-                sh "ssh bastion mkdir -p /root/cicd"
-                sh "scp -r ${env.WORKSPACE} bastion:/root/cicd/"
-                sh "ssh bastion ls -al /root/cicd/${imageRepository}"
+                sh "ssh bastion mkdir -p /root/cicd/${imageRepository}"
+                sh "scp -r ${env.WORKSPACE}/run-cicd bastion:/root/"
+                sh "scp -r ${env.WORKSPACE}/cicd bastion:/root/cicd/${imageRepository}/"
+                sh "ssh bastion /root/run-cicd/cmd/deploy . dev ."
             }
         }
 
