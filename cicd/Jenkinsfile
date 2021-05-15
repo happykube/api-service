@@ -100,7 +100,7 @@ node {
 
         stageName = "Copy CI/CD Scripts to bastion"
         stage(stageName) {
-            steps([$class: 'BapSshPromotionPublisherPlugin']) {
+            //steps([$class: 'BapSshPromotionPublisherPlugin']) {
                 sshPublisher(
                     continueOnError: false, failOnError: true,
                     publishers: [
@@ -118,7 +118,7 @@ node {
                         )
                     ]
                 )
-            }
+            //}
         }
    
 
