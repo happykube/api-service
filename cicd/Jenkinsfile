@@ -76,9 +76,8 @@ node {
         stage(stageName) {
             echo "**** START : " + stageName           
             script {
-                sh "cd ${env.WORKSPACE}"
-                sh "echo CICD PATH => ${RUNCICD_PATH}"
-                sh "${env.WORKSPACE}/run-cicd/cmd/build-image happycloudpak happy@cloud ${baseDir} java"
+                sh "cd ${env.WORKSPACE}/${baseDir}"
+                sh "${env.WORKSPACE}/run-cicd/cmd/build-image happycloudpak happy@cloud . java"
             }
         }
 
