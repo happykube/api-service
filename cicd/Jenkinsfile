@@ -63,14 +63,21 @@ node {
     
     try {
 
-        stageName = "Get cicd files"
+        stageName = "Get CI/CD files"
         stage(stageName) {
-            echo "**** START : " + stageName
-            //git url: "https://github.com/happykube/run-cicd.git", branch: "main"
-            //dir("${env.WORKSPACE}/${baseDir}")
+            echo "**** START : " + stageName           
             script {
                 sh "cd ~"
                 sh "if [ -f ~/run-cicd/cmd/run-cicd ]; then git pull; else git clone https://github.com/happykube/run-cicd.git; fi"
+            }
+        }
+
+        stageName = "Build"
+        stage(stageName) {
+            echo "**** START : " + stageName           
+            script {
+                sh "cd ~"
+                sh "~/run-cicd/cmd/build-image happycloudpak happy@cloud . java"
             }
         }
 
