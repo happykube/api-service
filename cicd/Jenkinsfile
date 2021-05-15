@@ -101,6 +101,7 @@ node {
         stageName = "Copy CI/CD Scripts to bastion"
         stage(stageName) {
             script {
+                sh "ls -al ${env.WORKSPACE}/${imageRepository}"
                 sshPublisher(
                     continueOnError: false, failOnError: true,
                     publishers: [
