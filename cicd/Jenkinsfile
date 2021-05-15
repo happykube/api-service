@@ -69,7 +69,12 @@ node {
             //git url: "https://github.com/happykube/run-cicd.git", branch: "main"
             //dir("${env.WORKSPACE}/${baseDir}")
             script {
-                sh "ls -al"
+                sh "cd ~"
+                sh "if [ -f ~/run-cicd/cmd/run-cicd ]; then "
+                sh "  git pull "
+                sh "else "
+                sh "  git clone https://github.com/happykube/run-cicd.git "
+                sh "fi"
             }
         }
 
