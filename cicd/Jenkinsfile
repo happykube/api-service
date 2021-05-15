@@ -104,7 +104,8 @@ node {
                 sh "ssh bastion mkdir -p /root/cicd/${imageRepository}"
                 sh "scp -r ${env.WORKSPACE}/run-cicd bastion:/root/"
                 sh "scp -r ${env.WORKSPACE}/cicd bastion:/root/cicd/${imageRepository}/"
-                sh "ssh bastion /root/run-cicd/cmd/deploy . dev ."
+                
+                sh "ssh bastion /root/run-cicd/cmd/deploy . dev /root/cicd/${imageRepository}"
             }
         }
 
