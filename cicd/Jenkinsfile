@@ -51,7 +51,14 @@ node {
     def sonarQubeLogin = props["sonarQubeLogin"]
     def sonarQubeProject = props["sonarQubeProject"]
     
-    def profile = "dev" 
+    def profile = props["profile"]
+
+    //--- runtime parameters
+    devLang = "java"
+    bastionHome = "/root"
+    imageRegUsername = "happycloudpak"
+    imageRegPassword = "happy@cloud"
+    //---
 
     try {
         stageName = "Inspection Code"
@@ -87,26 +94,26 @@ node {
             echo "**** START : " + stageName           
             script {                
                 sh "cd ${env.WORKSPACE}/${baseDir}"
-                sh "${env.WORKSPACE}/run-cicd/cmd/build-image happycloudpak happy@cloud . java ${env.WORKSPACE}/run-cicd"
+                sh "${env.WORKSPACE}/run-cicd/cmd/build-image ${imageRegUsername} ${imageRegPassword} . ${devLang} ${env.WORKSPACE}/run-cicd"
             }
         }
 
         stageName = "Copy CI/CD Scripts to bastion"
         stage(stageName) {
             script {
-                sh "ssh bastion mkdir -p /root/cicd/${imageRepository}"
-                sh "ssh bastion rm -rf /root/run-cicd 2>/dev/null"
-                sh "scp -r ${env.WORKSPACE}/run-cicd bastion:/root/"
-                sh "scp -r ${env.WORKSPACE}/cicd bastion:/root/cicd/${imageRepository}/"
+                sh "ssh bastion mkdir -p ${bastionHome}/cicd/${imageRepository}"
+                sh "ssh bastion rm -rf ${bastionHome}/run-cicd 2>/dev/null"
+                sh "scp -r ${env.WORKSPACE}/run-cicd bastion:${bastionHome}/"
+                sh "scp -r ${env.WORKSPACE}/cicd bastion:${bastionHome}/cicd/${imageRepository}/"
             }
         }
 
         stageName = "Deploy"
         stage(stageName) {
             script {
-                sh "ssh bastion mkdir -p /root/cicd/${imageRepository}/deploy"
-                sh "ssh bastion rm -f /root/cicd/${imageRepository}/deploy/* 2>/dev/null"
-                sh "ssh bastion /root/run-cicd/cmd/deploy . ${profile} /root/cicd/${imageRepository}"
+                sh "ssh bastion mkdir -p ${bastionHome}/cicd/${imageRepository}/deploy"
+                sh "ssh bastion rm -f ${bastionHome}/cicd/${imageRepository}/deploy/* 2>/dev/null"
+                sh "ssh bastion ${bastionHome}/run-cicd/cmd/deploy . ${profile} ${bastionHome}/cicd/${imageRepository}"
             }
         }
         
