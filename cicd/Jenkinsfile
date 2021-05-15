@@ -51,8 +51,8 @@ node {
     def sonarQubeLogin = props["sonarQubeLogin"]
     def sonarQubeProject = props["sonarQubeProject"]
     
-    def PROFILE = dev 
-    
+    def profile = dev 
+
     try {
         stageName = "Inspection Code"
         stage(stageName) {
@@ -105,7 +105,7 @@ node {
             script {
                 sh "ssh bastion mkdir -p /root/cicd/${imageRepository}/deploy"
                 sh "ssh bastion rm -f /root/cicd/${imageRepository}/deploy/* 2>/dev/null"
-                sh "ssh bastion /root/run-cicd/cmd/deploy . ${PROFILE} /root/cicd/${imageRepository}"
+                sh "ssh bastion /root/run-cicd/cmd/deploy . ${profile} /root/cicd/${imageRepository}"
             }
         }
         
