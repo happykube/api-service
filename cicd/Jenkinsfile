@@ -66,8 +66,11 @@ node {
         stageName = "Get cicd files"
         stage(stageName) {
             echo "**** START : " + stageName
-            git url: "https://github.com/happykube/run-cicd.git", branch: "main"
+            //git url: "https://github.com/happykube/run-cicd.git", branch: "main"
             //dir("${env.WORKSPACE}/${baseDir}")
+            script {
+                sh "ls -al"
+            }
         }
 
         /*
