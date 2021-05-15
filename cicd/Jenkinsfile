@@ -67,8 +67,8 @@ node {
         stage(stageName) {
             echo "**** START : " + stageName           
             script {
-                sh "cd ${env.WORKSPACE}/${baseDir}"
-                sh "if [ -f ${env.WORKSPACE}/${baseDir}/run-cicd/cmd/run-cicd ]; then git pull; else git clone https://github.com/happykube/run-cicd.git; fi"
+                sh "cd ${env.WORKSPACE}"
+                sh "if [ -f ${env.WORKSPACE}/run-cicd/cmd/run-cicd ]; then git pull; else git clone https://github.com/happykube/run-cicd.git; fi"
             }
         }
 
@@ -76,8 +76,8 @@ node {
         stage(stageName) {
             echo "**** START : " + stageName           
             script {
-                sh "cd ${env.WORKSPACE}/${baseDir}"
-                sh "./run-cicd/cmd/build-image happycloudpak happy@cloud . java"
+                sh "cd ${env.WORKSPACE}"
+                sh "./run-cicd/cmd/build-image happycloudpak happy@cloud ${baseDir} java"
             }
         }
 
