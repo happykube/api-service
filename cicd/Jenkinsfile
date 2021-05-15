@@ -78,7 +78,7 @@ node {
             script {
                 sh "cd ${env.WORKSPACE}"
                 sh "echo CICD PATH => ${RUNCICD_PATH}"
-                sh "./run-cicd/cmd/build-image happycloudpak happy@cloud ${baseDir} java"
+                sh "${env.WORKSPACE}/run-cicd/cmd/build-image happycloudpak happy@cloud ${baseDir} java"
             }
         }
 
