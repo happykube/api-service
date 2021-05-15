@@ -112,6 +112,7 @@ node {
         stageName = "Deploy"
         stage(stageName) {
             script {
+                sh "ssh bastion mkdir -p /root/cicd/${imageRepository}/deploy"
                 sh "ssh bastion /root/run-cicd/cmd/deploy . dev /root/cicd/${imageRepository}"
             }
         }
