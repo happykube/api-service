@@ -68,7 +68,7 @@ node {
             script {
                 sh "cd ${env.WORKSPACE}"
                 sh "if [ -f ${env.WORKSPACE}/run-cicd/cmd/run-cicd ]; then git pull origin main; else git clone https://github.com/happykube/run-cicd.git; fi"
-                echo "RUNCICD_PATH=${env.WORKSPACE}/run-cicd"
+                sh "echo RUNCICD_PATH=${env.WORKSPACE}/run-cicd"
             }
         }
 
