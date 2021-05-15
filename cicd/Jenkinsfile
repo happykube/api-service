@@ -61,45 +61,6 @@ node {
     echo "New Tag : ${tag}"
     
     try {
-
-        stageName = "Get CI/CD files"
-        stage(stageName) {
-            echo "**** START : " + stageName           
-            script {
-                sh "cd ${env.WORKSPACE}"
-                sh "if [ -f ${env.WORKSPACE}/run-cicd/cmd/run-cicd ]; then rm -rf run-cicd; fi"
-                sh "git clone https://github.com/happykube/run-cicd.git"
-            }
-        }
-
-        stageName = "Build"
-        stage(stageName) {
-            echo "**** START : " + stageName           
-            script {                
-                sh "cd ${env.WORKSPACE}/${baseDir}"
-                sh "${env.WORKSPACE}/run-cicd/cmd/build-image happycloudpak happy@cloud . java ${env.WORKSPACE}/run-cicd"
-            }
-        }
-
-        /*
-        stageName = "Build maven project"
-        stage(stageName) {
-            echo "**** START : " + stageName
-            def _dir = pwd();
-            echo "path : ${_dir}"
-            echo "baseDir : ${baseDir}"
-            echo "baseDeployDir : ${baseDeployDir}"
-            sh "ls -al"
-            script {
-                    sh ("mvn -B -f ${baseDir} clean package")
-                    echo "*** RESULT ***"
-                    sh ("pwd")
-                    sh ("ls -al ${baseDir}/target")
-            }
-        }		
-        */
-
-        /*
         stageName = "Inspection Code"
         stage(stageName) {
             echo "**** START : " + stageName
@@ -118,22 +79,48 @@ node {
                 }				
             }
         }
-        */
 
-        /*
-        stageName = "Build Microservice image"	
+        stageName = "Get CI/CD files"
         stage(stageName) {
-            echo "**** START : " + stageName
             script {
-                docker.withRegistry("${dockerRegistry}", "${credentialRegistry}") {
-                    sh "docker build -f ${baseDir}${baseDeployDir}/Dockerfile -t ${image}:${tag} ${WORKSPACE}"
-                    sh "docker push ${image}:${tag}"
-                    sh "docker tag ${image}:${tag} ${image}:latest"
-                    sh "docker push ${image}:latest"
-                }
+                sh "cd ${env.WORKSPACE}"
+                sh "if [ -f ${env.WORKSPACE}/run-cicd/cmd/run-cicd ]; then rm -rf run-cicd; fi"
+                sh "git clone https://github.com/happykube/run-cicd.git"
             }
         }
-        */
+
+        stageName = "Build"
+        stage(stageName) {
+            echo "**** START : " + stageName           
+            script {                
+                sh "cd ${env.WORKSPACE}/${baseDir}"
+                sh "${env.WORKSPACE}/run-cicd/cmd/build-image happycloudpak happy@cloud . java ${env.WORKSPACE}/run-cicd"
+            }
+        }
+
+        stageName = "Copy CI/CD Scripts to bastion"
+        stage(stageName) {
+            steps([$class: 'BapSshPromotionPublisherPlugin']) {
+                sshPublisher(
+                    continueOnError: false, failOnError: true,
+                    publishers: [
+                        sshPublisherDesc(
+                            configName: "bastion",  //Jenkins 시스템 정보에 사전 입력한 서버 ID
+                            verbose: true,
+                            transfers: [
+                                sshTransfer(
+                                    sourceFiles: "${env.WORKSPACE}/run-cicd, ${env.WORKSPACE}/cicd", //전송할 파일
+                                    removePrefix: "", //파일에서 삭제할 경로가 있다면 작성
+                                    remoteDirectory: "/cicd/${imageRepository}"     //배포할 위치
+                                    execCommand: "ls -al /cicd/${imageRepository}"  //원격지에서 실행할 커맨드
+                                )
+                            ]
+                        )
+                    ]
+                )
+            }
+        }
+   
 
         /*
         stageName = "Deploy to Cluster"
