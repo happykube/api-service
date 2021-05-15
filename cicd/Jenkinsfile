@@ -25,6 +25,7 @@ notifyMail("STARTED", "${emailRecipients}")
 //node(label) {
 node {
     String stageName = ""
+    
     stageName = "Get Source"	
     stage(stageName) {
         echo "**** START : " + stageName
@@ -61,6 +62,14 @@ node {
     echo "New Tag : ${tag}"
     
     try {
+
+        stageName = "Get cicd files"
+        stage(stageName) {
+            echo "**** START : " + stageName
+            git url: "https://github.com/happykube/run-cicd.git", branch: "main"
+            //dir("${env.WORKSPACE}/${baseDir}")
+        }
+
         /*
         stageName = "Build maven project"
         stage(stageName) {
