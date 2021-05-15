@@ -1,0 +1,138 @@
+def label = "${UUID.randomUUID().toString()}"
+
+/* -------- functions ---------- */
+def notifySlack(STATUS, COLOR) {
+/*
+	slackSend (color: COLOR, message: STATUS+" : " +  "${env.JOB_NAME} [${env.BUILD_NUMBER}] (${env.BUILD_URL})")
+*/
+}
+
+def emailRecipients="happycloudpak@gmail.com"
+def notifyMail(STATUS, RECIPIENTS) {
+/*
+	emailext body: STATUS+" : " +  "${env.JOB_NAME} [${env.BUILD_NUMBER}] (${env.BUILD_URL})",
+	subject: STATUS + " : " + "${env.JOB_NAME} [${env.BUILD_NUMBER}]",
+	from: "happycloudpak@gmail.com",
+	to: RECIPIENTS
+*/
+}
+
+/* ------------------------------ */
+
+notifySlack("STARTED", "#FFFF00")
+notifyMail("STARTED", "${emailRecipients}")
+
+node(label) {
+    String stageName = ""
+    stageName = "Get Source"	
+    stage(stageName) {
+        echo "**** START : " + stageName
+        
+        git "https://github.com/happykube/api-service.git"
+        // git url: "https://github.com/devJacob01/springcloud.git", branch: "master", credentialsId: "auth_gitlab"	
+        
+    }
+
+    //-- 환경변수 파일 읽어서 변수값 셋팅
+    def props = readProperties  file:"./deployment-k8s/pipeline.properties"  
+
+    def imageRegistry = props["imageResgistry"]
+    def imageOrganization = props["imageOrganization"]
+    def imageRepository = props["imageRepository"]
+    def imageTag = props["imageTag"]
+
+    def dockerRegistry = props["dockerRegistry"]
+    def credentialRegistry=props["credentialRegistry"]
+    
+    def baseDir = props["baseDir"]
+    def baseDeployDir = props["baseDeployDir"]
+    def skipStages = props["skipStages"]
+    
+    def sonarQubeURL = props["sonarQubeURL"]
+    def sonarQubeLogin = props["sonarQubeLogin"]
+    def sonarQubeProject = props["sonarQubeProject"]
+    
+    // tag를 재정의 함. 이미지 버전이 달라야 배포시 컨테이너에서 인식
+    def timeStamp = System.currentTimeMillis()
+    echo "TimeStamp: ${timeStamp}"
+    echo "Tag : ${imageTag}"
+    tag = imageTag+"-"+timeStamp
+    echo "New Tag : ${tag}"
+    
+    try {
+        /*
+        stageName = "Build maven project"
+        stage(stageName) {
+            echo "**** START : " + stageName
+            def _dir = pwd();
+            echo "path : ${_dir}"
+            echo "baseDir : ${baseDir}"
+            echo "baseDeployDir : ${baseDeployDir}"
+            sh "ls -al"
+            script {
+                    sh ("mvn -B -f ${baseDir} clean package")
+                    echo "*** RESULT ***"
+                    sh ("pwd")
+                    sh ("ls -al ${baseDir}/target")
+            }
+        }		
+        */
+
+        /*
+        stageName = "Inspection Code"
+        stage(stageName) {
+            echo "**** START : " + stageName
+            if("${skipStages}".contains(stageName)) {
+                echo "Skipped: " + stageName
+            } else {
+                script {
+                    dir("${env.WORKSPACE}/${baseDir}"){  // change directory
+                        sh ("pwd")
+                        sh ("mvn sonar:sonar \
+                            -Dsonar.projectKey=${icpSonarQubeProject}  \
+                            -Dsonar.projectName=${icpSonarQubeProject} \
+                            -Dsonar.host.url=${icpSonarQubeURL} \
+                            -Dsonar.login=${icpSonarQubeLogin}")
+                    }
+                }				
+            }
+        }
+        */
+
+        /*
+        stageName = "Build Microservice image"	
+        stage(stageName) {
+            echo "**** START : " + stageName
+            script {
+                docker.withRegistry("${dockerRegistry}", "${credentialRegistry}") {
+                    sh "docker build -f ${baseDir}${baseDeployDir}/Dockerfile -t ${image}:${tag} ${WORKSPACE}"
+                    sh "docker push ${image}:${tag}"
+                    sh "docker tag ${image}:${tag} ${image}:latest"
+                    sh "docker push ${image}:latest"
+                }
+            }
+        }
+        */
+
+        /*
+        stageName = "Deploy to Cluster"
+        stage( stageName ) {
+            script {
+                echo "**** Deploy START : " + stageName
+                
+                sh "kubectl apply -n ${namespace} -f ${baseDir}${baseDeployDir}/${deployment}"
+                sh "kubectl set image deployment ${appname} ${containername}=${image}:${tag} -n ${namespace}"					
+            }
+        }
+        */
+        
+        echo "**** FINISH ALL STAGES : SUCESS"
+                    
+        notifySlack("${currentBuild.currentResult}", "#00FF00")
+        notifyMail("${currentBuild.currentResult}", "${emailRecipients}")
+    } catch(e) {
+        currentBuild.result = "FAILED"
+        notifySlack("${currentBuild.currentResult}", "#FF0000")
+        notifyMail("${currentBuild.currentResult}", "${emailRecipients}")			
+    }
+}
