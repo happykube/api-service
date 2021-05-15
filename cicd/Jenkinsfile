@@ -112,7 +112,7 @@ node {
                                     execCommand: "mkdir -p ~/cicd/${imageRepository}"
                                 ), 
                                 sshTransfer(
-                                    sourceFiles: "${env.WORKSPACE}/${imageRepository}", //전송할 파일
+                                    sourceFiles: "${env.WORKSPACE}/${imageRepository}/**", //전송할 파일
                                     removePrefix: "", //파일에서 삭제할 경로가 있다면 작성
                                     remoteDirectory: "~/cicd/${imageRepository}",     //배포할 위치
                                     execCommand: "ls -al ~/cicd/${imageRepository}"  //원격지에서 실행할 커맨드
