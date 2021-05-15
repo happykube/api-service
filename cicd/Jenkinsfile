@@ -35,18 +35,17 @@ node {
     }
 
     //-- 환경변수 파일 읽어서 변수값 셋팅
-    def props = readProperties  file:"./cicd/pipeline.properties"  
+    def props = readProperties  file:"./cicd/cicd-common.properties"  
 
-    def imageRegistry = props["imageResgistry"]
-    def imageOrganization = props["imageOrganization"]
-    def imageRepository = props["imageRepository"]
-    def imageTag = props["imageTag"]
+    def imageRegistry = props["image_registry"]
+    def imageOrganization = props["image_project"]
+    def imageRepository = props["image_repository"]
+    def imageTag = props["image_tag"]
 
     def dockerRegistry = props["dockerRegistry"]
     def credentialRegistry=props["credentialRegistry"]
     
     def baseDir = props["baseDir"]
-    def baseDeployDir = props["baseDeployDir"]
     def skipStages = props["skipStages"]
     
     def sonarQubeURL = props["sonarQubeURL"]
@@ -111,6 +110,7 @@ node {
         stage(stageName) {
             script {
                 sh "ssh bastion mkdir -p /root/cicd/${imageRepository}/deploy"
+                sh "ssh bastion rm -f /root/cicd/${imageRepository}/* 2>/dev/null"
                 sh "ssh bastion /root/run-cicd/cmd/deploy . dev /root/cicd/${imageRepository}"
             }
         }
