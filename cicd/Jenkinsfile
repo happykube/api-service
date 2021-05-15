@@ -95,6 +95,7 @@ node {
         stage(stageName) {
             script {
                 sh "ssh bastion mkdir -p /root/cicd/${imageRepository}"
+                sh "ssh bastion rm -rf /root/run-cicd 2>/dev/null"
                 sh "scp -r ${env.WORKSPACE}/run-cicd bastion:/root/"
                 sh "scp -r ${env.WORKSPACE}/cicd bastion:/root/cicd/${imageRepository}/"
             }
