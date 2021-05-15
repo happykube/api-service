@@ -51,7 +51,7 @@ node {
     def sonarQubeLogin = props["sonarQubeLogin"]
     def sonarQubeProject = props["sonarQubeProject"]
     
-    def profile = dev 
+    def profile = "dev" 
 
     try {
         stageName = "Inspection Code"
