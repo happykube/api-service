@@ -73,7 +73,7 @@ node {
             }
         }
 
-        stageName = "Get CI/CD files"
+        stageName = "Get CI/CD scripts"
         stage(stageName) {
             script {
                 sh "cd ${env.WORKSPACE}"
