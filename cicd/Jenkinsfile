@@ -109,45 +109,12 @@ node {
             }
         }
 
-        /*
+        stageName = "Deploy"
         stage(stageName) {
             script {
-                sh "ls -al ${env.WORKSPACE}"
-                sshPublisher(
-                    continueOnError: false, failOnError: true,
-                    publishers: [
-                        sshPublisherDesc(
-                            configName: "bastion",  //Jenkins 시스템 정보에 사전 입력한 서버 ID
-                            verbose: true,
-                            transfers: [
-                                sshTransfer(
-                                    execCommand: "mkdir -p ~/cicd/${imageRepository}"
-                                ), 
-                                sshTransfer(
-                                    sourceFiles: "${env.WORKSPACE}/README.md", //전송할 파일
-                                    removePrefix: "", //파일에서 삭제할 경로가 있다면 작성
-                                    remoteDirectory: "~//cicd//${imageRepository}",     //배포할 위치
-                                    execCommand: "ls -al ~/cicd/${imageRepository}"  //원격지에서 실행할 커맨드
-                                )
-                            ]
-                        )
-                    ]
-                )
+                sh "ssh bastion /root/run-cicd/cmd/deploy . dev /root/cicd/${imageRepository}"
             }
         }
-        */
-
-        /*
-        stageName = "Deploy to Cluster"
-        stage( stageName ) {
-            script {
-                echo "**** Deploy START : " + stageName
-                
-                sh "kubectl apply -n ${namespace} -f ${baseDir}${baseDeployDir}/${deployment}"
-                sh "kubectl set image deployment ${appname} ${containername}=${image}:${tag} -n ${namespace}"					
-            }
-        }
-        */
         
         echo "**** FINISH ALL STAGES : SUCESS"
                     
