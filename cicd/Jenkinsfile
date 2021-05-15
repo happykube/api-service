@@ -22,7 +22,8 @@ def notifyMail(STATUS, RECIPIENTS) {
 notifySlack("STARTED", "#FFFF00")
 notifyMail("STARTED", "${emailRecipients}")
 
-node(label) {
+//node(label) {
+node {
     String stageName = ""
     stageName = "Get Source"	
     stage(stageName) {
