@@ -1,4 +1,4 @@
-package com.api.swagger;
+package com.api.user;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -23,7 +23,7 @@ public class SwaggerConfig {
 		Docket docket = new Docket(DocumentationType.SWAGGER_2)
 				.apiInfo(apiinfo)
 				.select()
-				.apis(RequestHandlerSelectors.basePackage("com.api.swagger"))
+				.apis(RequestHandlerSelectors.basePackage("com.api.user"))
 				.paths(PathSelectors.any())
 				.build();
 		

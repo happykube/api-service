@@ -1,4 +1,4 @@
-package com.api.swagger;
+package com.api.user;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -40,6 +40,7 @@ public class ApiController {
 				.userId("user01")
 				.userName("홍길동")
 				.build();
+		
 		userList.put(user.getUserId(), user);
 
 		user = User.builder()
